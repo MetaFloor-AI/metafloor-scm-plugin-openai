@@ -1,0 +1,33 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # The harness is stdlib, zero-deps — no install step needed.
+      - name: Unit tests (harness: registry, dial, gate, audit, session, hook, values)
+        run: python -m unittest discover -s eval/tests -t .
+
+      - name: Codex gate-adapter proof (fail-closed + field normalization)
+        run: python eval/tests/test_codex_adapter.py
+
+      - name: P0 eval (safety must be 100%, over-gate budget = 0)
+        run: python eval/run.py --max-over-gate 0
+
+      - name: Skill + registry consistency lint
+        run: python eval/lint_skills.py --strict
+
+      - name: Validate manifests (plugin.json + marketplace.json are valid JSON)
+        run: |
+          python -c "import json; json.load(open('.codex-plugin/plugin.json'))"
+          python -c "import json; json.load(open('.agents/plugins/marketplace.json'))"
+          python -c "import json; json.load(open('hooks.json'))"

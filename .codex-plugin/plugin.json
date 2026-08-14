@@ -1,0 +1,25 @@
+{
+  "name": "supply-chain",
+  "version": "0.1.0",
+  "description": "Deep supply-chain operator expertise across 55 enterprise systems and 16 end-to-end workflows, plus a deterministic policy gate with an autonomy dial. Owns expertise + safety policy, never the tool/integration layer.",
+  "author": { "name": "MetaFloor", "url": "https://metafloor.ai" },
+  "homepage": "https://metafloor.ai",
+  "repository": "https://github.com/MetaFloor-AI/metafloor-scm-plugin-codex",
+  "license": "MIT",
+  "keywords": ["supply-chain", "erp", "sap", "oracle", "kinaxis", "procurement", "warehouse", "quality", "recall", "safety", "autonomy"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "MetaFloor Supply Chain",
+    "shortDescription": "Supply-chain operator expertise + a fail-closed safety gate",
+    "longDescription": "55 enterprise-system skills (SAP, Oracle, Kinaxis, Manhattan, Coupa, Veeva, and more) across ERP, planning, warehouse, transportation, procurement, quality, MES, maintenance, customs, risk, PLM, and CRM; 16 end-to-end business workflows; and a deterministic PreToolUse policy gate with an autonomy dial that governs committing and outbound connector actions. The plugin owns expertise + safety policy, never the tool/integration layer — you bring your own MCP connectors.",
+    "developerName": "MetaFloor",
+    "category": "Productivity",
+    "capabilities": ["Read", "Interactive"],
+    "websiteURL": "https://metafloor.ai",
+    "defaultPrompt": [
+      "How does SAP handle a partial goods receipt on a PO?",
+      "Run a DC stock-split for a scarce SKU and stage the WMS allocation through the gate.",
+      "Reconcile on-hand vs WMS before we act on the number."
+    ]
+  }
+}
