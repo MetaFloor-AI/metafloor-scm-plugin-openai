@@ -19,11 +19,13 @@ approval flow**. Think of this plugin as the operator judgment layer that sits o
 Requires **OpenAI Codex CLI**. The skills work with no dependencies.
 
 ```bash
-# add this repo as a marketplace, then install the plugin
-codex plugin marketplace add .
+# add this repo as a marketplace straight from GitHub, then install the plugin
+codex plugin marketplace add MetaFloor-AI/metafloor-scm-plugin-openai
 codex plugin add supply-chain@metafloor
 codex plugin list                                 # -> supply-chain@metafloor  installed, enabled
 ```
+
+<sub>Working on a local clone instead? `codex plugin marketplace add .` from the repo root.</sub>
 
 Then ask it anything supply-chain — no connector needed:
 ```bash
