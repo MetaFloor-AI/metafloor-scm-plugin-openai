@@ -15,7 +15,9 @@
     "developerName": "MetaFloor",
     "category": "Productivity",
     "capabilities": ["Read", "Interactive"],
-    "websiteURL": "https://metafloor.ai",
+    "websiteURL": "https://www.metafloor.ai",
+    "privacyPolicyURL": "https://www.metafloor.ai/privacy",
+    "termsOfServiceURL": "https://www.metafloor.ai/terms",
     "composerIcon": "./assets/brand/metafloor-mark.png",
     "logo": "./assets/brand/metafloor-mark.png",
     "defaultPrompt": [

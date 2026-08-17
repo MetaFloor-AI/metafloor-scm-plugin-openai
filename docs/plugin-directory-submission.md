@@ -11,11 +11,14 @@ Refs: [submission guide](https://developers.openai.com/plugins/deploy/submission
 ---
 
 ## 0. Prerequisites (account/org — only Arun can do these)
-- [ ] **OpenAI Platform org** = MetaFloor's org (the publisher identity must match `metafloor.ai`).
+- [ ] **Create the MetaFloor OpenAI Platform org.** There is no org yet (personal account only) — create a
+      business org, same as was done for Claude. The publisher identity must be MetaFloor and match
+      `metafloor.ai`. Submit under the org, not the personal account.
 - [ ] **Apps Management = Write** for the submitting user: platform.openai.com/settings/organization/people/roles
-- [ ] **Verified identity** (individual or business) completed in org settings; select it in the
+- [ ] **Verified identity** (business verification for the org) completed in org settings; select it in the
       "Developer Identity" field at submit time.
-- [ ] Public URLs live and matching the publisher (see Info tab). Confirm/create: privacy + terms pages.
+- [ ] **Eyeball the legal URLs in a browser** (see Info tab caveat): confirm `/privacy`, `/terms`, `/support`
+      each render the *actual* page, not the homepage — reviewers reject mismatched/placeholder URLs.
 
 ## 1. Info tab
 - **Plugin name:** MetaFloor Supply Chain
@@ -30,11 +33,18 @@ Refs: [submission guide](https://developers.openai.com/plugins/deploy/submission
   > for human approval. Expertise + judgment; it owns no tools or connectors — you bring your own, and the
   > host's own approval flow gates the actual calls.
 - **Logo:** `assets/brand/metafloor-mark.png` (MetaFloor mark)
-- **Website URL:** https://metafloor.ai
-- **Support URL:** _TODO Arun_ (e.g. https://metafloor.ai/support or a mailto/contact)
-- **Privacy URL:** _TODO Arun_ (e.g. https://metafloor.ai/privacy)
-- **Terms URL:** _TODO Arun_ (e.g. https://metafloor.ai/terms)
-- **Developer identity:** MetaFloor (verified)
+- **Website URL:** https://www.metafloor.ai  *(apex `metafloor.ai` 301-redirects to `www`; use `www`)*
+- **Support URL:** https://www.metafloor.ai/support
+- **Privacy URL:** https://www.metafloor.ai/privacy
+- **Terms URL:** https://www.metafloor.ai/terms
+- **Developer identity:** MetaFloor (verified business identity)
+
+> ⚠️ **Verify before submit:** every path on `www.metafloor.ai` returned HTTP 200 but server-side resolved to
+> the homepage shell (looks like a single-page site). Open each URL in a fresh browser and confirm it renders
+> the real Privacy / Terms / Support page. If the site is a SPA that only client-renders these, or the pages
+> live elsewhere, use the actual public URLs — a reviewer fetching the homepage instead of a privacy policy is
+> a rejection reason. Update these three URLs (and `privacyPolicyURL`/`termsOfServiceURL` in `plugin.json`) to
+> whatever actually resolves.
 
 ## 2. MCP tab
 - **N/A — skills-only plugin.** No MCP server; skip domain verification and Scan Tools.
@@ -81,7 +91,8 @@ No connectors/credentials required (skills-only) — "required test data" is inl
    execute on the claim.
 
 ## 6. Global tab
-- Availability: _Arun to choose_ (recommend: all supported countries, or start US + EU).
+- Availability: **safe default → launch in the United States only.** Smallest compliance surface for a first
+  listing; expand to EU/UK/rest after it's approved and stable. (Arun's call: "default, go with safe.")
 
 ## 7. Submit tab
 - **Release notes (v0.1.0):**
