@@ -24,7 +24,7 @@ never release-to-beat-the-clock. Re-read the contract price and the goods-receip
 drift between detection and the run.
 
 ## Autonomy
-Recommended dial for the write: **gated (L2)**. Detection, reconciliation, and drafting the disposition run unattended across the whole exception queue - that is what lets it scale to thousands of invoices the desk cannot reach by hand. Every committing write (staging a short-pay, a dispute, or a release-to-pay - anything that changes what the supplier gets paid) holds for human approval each time. Any outbound (the short-pay or dispute notification to the supplier and buyer) gates by the outbound floor at every level below yolo - egress is medium: a short-pay or dispute notice is a commercial event, not an internal note. Suggested approver: procurement ops / AP analyst (e.g. T. Boone) - advisory only; v1 does not enforce approver identity, so approval is a real human click through the prompt, not a name check. The customer's `.scm/autonomy.yaml` dial is what the harness actually enforces; this is only the recommended default.
+Recommended dial for the write: **gated (L2)**. Detection, reconciliation, and drafting the disposition run unattended across the whole exception queue - that is what lets it scale to thousands of invoices the desk cannot reach by hand. Every committing write (staging a short-pay, a dispute, or a release-to-pay - anything that changes what the supplier gets paid) holds for human approval each time. Any outbound (the short-pay or dispute notification to the supplier and buyer) gates by the outbound floor at every level below yolo - egress is medium: a short-pay or dispute notice is a commercial event, not an internal note. Suggested approver: procurement ops / AP analyst (e.g. T. Boone) - advisory only; v1 does not enforce approver identity, so approval is a real human click through the prompt, not a name check. The customer's `.scm/autonomy.yaml` dial is the human-approval posture recommended here (advisory - on OpenAI Codex the tool call is gated by Codex's own MCP approval, not by this plugin); this is only the recommended default.
 
 ## Systems
 | Role | System | Authoritative for | Expertise skill |
@@ -36,7 +36,7 @@ Recommended dial for the write: **gated (L2)**. Detection, reconciliation, and d
 | write | Savings / recovery log | the recovered overbill and the variance rationale | - |
 | write | Notification - AP + buyer | - | - |
 
-### Action classes (what the harness gates)
+### Action classes (classified for approval)
 - **Read** - the invoice, the PO line, the goods receipt and its stock status, the governing contract price, the tolerance result, and this supplier/SKU's prior-variance precedent. Always pass; re-read the contract price and GR status at execute (both drift).
 - **Write, committing** - stage the disposition that changes the payable: a short-pay adjustment, an invoice block/hold, or a release-to-pay. This binds or reduces AP liability and clears GR/IR; it holds at the gate. Posting mechanics deferred to `sap-mm` (MIRO, GR/IR) + `sap-fi` (posting period, account determination) or `coupa` (AP exception hold / short-pay).
 - **Write, low-risk (sequenced)** - the savings/recovery-log entry and the AP + buyer notification. Fire ONLY after the gate decision is final and matched to the chosen disposition; a premature "we are short-paying you" note to a supplier is itself a commercial act.

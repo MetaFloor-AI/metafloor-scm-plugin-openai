@@ -20,7 +20,7 @@ planning, or a return-to-vendor to the supplier crosses org boundaries; the pack
 spec/tolerance IP, and supplier identity, so the outbound is high-sensitivity) gates by the outbound floor at
 every level below yolo. Suggested approver: quality manager (e.g. K. Osei) - advisory only; v1 does not
 enforce approver identity, so approval is a real human click through the prompt, not a name check. The
-customer's `.scm/autonomy.yaml` dial is what the harness actually enforces; this is only the recommended
+customer's `.scm/autonomy.yaml` dial is the human-approval posture recommended here (advisory - on OpenAI Codex the tool call is gated by Codex's own MCP approval, not by this plugin); this is only the recommended
 default.
 
 ## Systems (each vendor HOW deferred by name)
@@ -49,7 +49,7 @@ default.
    held subset as its own packet, do not carry the lot-level call onto it. If the named approver is unreachable
    within the org's response SLA (a held lot blocks production), escalate to the MRB chair or a delegate per the
    org's approval matrix; the gate does not lapse into auto-approval.
-5. **Act** - on approval only. Every write is classified so the harness gates by class:
+5. **Act** - on approval only. Every write is classified so each is gated for approval by class:
    - **Write (committing)**: record the disposition + hold in the quality system; set the ERP lot status
      (QI -> unrestricted under concession, or -> blocked); a SAP QM usage decision posting the lot out of QI;
      release a container hold on the floor. Each binds stock or certifies a record.

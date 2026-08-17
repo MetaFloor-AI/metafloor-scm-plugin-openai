@@ -32,7 +32,7 @@ approval each time; a forward-buy above the spend threshold needs the **Category
 not the buyer alone. Any outbound (a supplier pull-in or a fresh RFQ to an alternate) gates by the outbound floor
 at every level below yolo - premature outreach signals your hand to a market that is already tight. Suggested
 approver: category manager, co-signed by the head of sourcing above threshold - advisory only; v1 does not
-enforce approver identity. The customer's `.scm/autonomy.yaml` dial is what the harness enforces; this is the
+enforce approver identity. The customer's `.scm/autonomy.yaml` dial is what the human-approval posture recommended here; this is the
 recommended default.
 
 ## Systems (each vendor HOW deferred by name)
@@ -45,7 +45,7 @@ recommended default.
 | What the commodity feeds | BOM / component master | reads which builds and finished SKUs consume the commodity | `sap-mm` |
 | Notify | Notification - sourcing + planning (once) | - | - |
 
-### Action classes (what the harness gates)
+### Action classes (classified for approval)
 - **Read** - the confirmations, every open PO + posted confirmation on the commodity, the market/index signal,
   time-phased demand, the BOM roll-up. Always pass; re-read the drifting ones (live confirmations, the index,
   on-hand, open PO balances) at execute.

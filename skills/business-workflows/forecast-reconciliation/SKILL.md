@@ -19,7 +19,7 @@ logging the CRM program signal) holds for human approval each time. Any outbound
 team; reaching out to the *customer* to confirm is a higher-sensitivity external send) gates by the outbound
 floor at every level below yolo. Suggested approver: demand planner (e.g. R. Okoro) - advisory only;
 v1 does not enforce approver identity, so approval is a real human click through the prompt, not a name check.
-The customer's `.scm/autonomy.yaml` dial is what the harness actually enforces; this is only the recommended
+The customer's `.scm/autonomy.yaml` dial is the human-approval posture recommended here (advisory - on OpenAI Codex the tool call is gated by Codex's own MCP approval, not by this plugin); this is only the recommended
 default.
 
 ## Trigger
@@ -192,7 +192,7 @@ team unaware. Release landed 3 weeks before quarter-end. History: `r = 0.86` (ov
 | Sales friction, dampening not evidenced | recommendation to dampen/hold with no logged rationale | attach the evidence pack (bias, zone, flat corroborators, precedent); the gate is the planner, not sales; the customer confirm resolves it objectively |
 | Misread cumulative 830 as discrete | quantity qualifier says CUM; step implausibly large vs annual volume | convert CUM -> discrete before computing the gap; re-run |
 | Pull-in mistaken for an increase | out-month buckets drop as near-months rise | net across the horizon; treat as timing, re-phase not re-size |
-| Write before the gate / auto-accept under pressure | the write is gated (held for approval), not auto-committed | the harness holds the write until the named planner approves; nothing lands unapproved |
+| Write before the gate / auto-accept under pressure | the write is gated (held for approval), not auto-committed | the write is held for human approval until the named planner approves; nothing lands unapproved |
 
 ## Edge cases the data doesn't list
 - **New platform / new part:** POS is absent by design - not disconfirming. Reweight to firm-zone + CRM + account team.

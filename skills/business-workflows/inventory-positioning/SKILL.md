@@ -19,8 +19,7 @@ Every committing write (publishing a safety-stock target, releasing a re-positio
 coverage profile) holds for human approval each time. Any outbound (the notification to planning, sent once)
 gates by the outbound floor at every level below yolo. Suggested approver: inventory network lead
 (e.g. R. Chan) - advisory only; v1 does not enforce approver identity, so approval is a real human click
-through the prompt, not a name check. The customer's `.scm/autonomy.yaml` dial is what the harness actually
-enforces; this is only the recommended default.
+through the prompt, not a name check. The customer's `.scm/autonomy.yaml` dial is the human-approval posture recommended here (advisory - on OpenAI Codex the tool call is gated by Codex's own MCP approval, not by this plugin); this is only the recommended default.
 
 ## Systems
 | System (record) | Read / write | Write mechanics deferred by name to |

@@ -1,74 +1,57 @@
-# Architecture - metafloor-scm-plugin-codex
+# Architecture - metafloor-scm-plugin-openai
 
-> System structure, flow, and safety. Update only when these change.
+> System structure and safety posture. Update only when these change.
 
 ## Overview
 An OpenAI Codex CLI plugin that adds supply-chain capability on top of Codex, which owns the runtime,
-agent loop, tools/MCP connections, permissions, and execution. The plugin contributes **expertise** (how
-enterprise systems work + how supply-chain decisions are made) and **safety** (a deterministic gate over
-consequential actions). It owns **no** tools, connectors, or integration layer — that keeps it portable
-across whatever the customer connects.
+agent loop, tools/MCP connections, permissions, and execution. The plugin contributes **expertise**
+(how enterprise systems work + how supply-chain decisions are made) and **judgment** (how to classify
+a connector action and when to pause for human approval). It owns **no** tools, connectors, or
+integration layer, and it does **not** enforce a control over your tool calls — that keeps it portable,
+and it means enforcement is Codex's job, not the plugin's (see Safety posture).
 
 ## Components
 - **Platform expertise skills** — `skills/platforms/<category>/<vendor>/SKILL.md`. Prose operator knowledge
-  for one specific vendor system (object/state model, the vocabulary that bites, the read/write/destructive
-  matrix, the gotchas as causal chains, edge states, recovery patterns, guardrails; deep material in
-  `references/`). 15 categories: erp, planning, warehouse, transportation, oms, procurement, contracts,
-  quality, mes, maintenance, customs, visibility, risk, plm, crm. No tool names.
+  for one vendor system (object/state model, the vocabulary that bites, the read/write/destructive matrix,
+  gotchas as causal chains, edge states, recovery, guardrails; deep material in `references/`). 15 categories.
+  No tool names.
 - **Business-workflow skills** — `skills/business-workflows/<name>/SKILL.md`. One end-to-end supply-chain
-  decision each (grounded in a real use case): the operating method (the computation with thresholds), a
-  worked example with numbers, and a failure→recovery playbook. Defers each vendor HOW by name to the
-  matching expertise skill.
-- **Gating skill** — `skills/gating/supply-chain-gating/` — the cross-cutting read/write/destructive
-  reference the workflows and gate share.
+  decision each: the operating method (the computation with thresholds), a worked example with numbers, and
+  a failure→recovery playbook. Each recommends a per-workflow autonomy posture (advisory). Defers each vendor
+  HOW by name to the matching expertise skill.
+- **Gating skill** — `skills/gating/supply-chain-gating/` — the cross-cutting judgment: classify each action
+  (read / write / destructive / outbound), when to stop for a human, and how to present a consequential action
+  for approval. Advisory, not an enforced control.
 - **Specialist agents** — `agents/*.md` (+ `agents/openai.yaml` interface) — independent subagents the main
-  agent delegates to for a fresh, uncontaminated context (independence is the one thing a skill cannot give):
-  `decision-reviewer` (red-teams a decision pre-action), `scope-auditor` (blast radius vs evidence),
-  `genealogy-tracer` (lot genealogy + where-distributed map for recall / multi-tier), `cross-system-reconciler`
-  (resolves system-vs-system disagreements). Each is self-contained and **fully tool-enabled** (no crippling
-  restrictions); it stays analysis-only by its prompt (it advises, it does not execute on its own), and the
-  gate enforces regardless of any agent's verdict. Safety comes from judgment + the gate, never from disabling
-  the agent's tools.
-- **Safety harness** — `core/` (stdlib, unit-tested): `registry.py` classifies a connector tool call;
-  `autonomy.py` resolves the customer's dial; `gate.py` decides allow/ask/deny; `session.py` tracks the
-  session blast-radius; `audit.py` records governed decisions. Wired via `scripts/pretooluse.py` on `mcp__*`.
-- **Operator commands** — `commands/scm-*.md` backed by `scripts/scm_*.py` (run, audit, autonomy,
-  connectors); `scm-replenish` reuses `scm_run.py`.
-- **Eval** — `eval/`: `run.py` (P0 gate-safety scenarios), `lint_skills.py` (skill + registry consistency),
-  `tests/` (harness unit tests + the Codex adapter proof). CI runs all three.
+  agent delegates to for a fresh, uncontaminated context: `decision-reviewer`, `scope-auditor`,
+  `genealogy-tracer`, `cross-system-reconciler`. Fully tool-enabled; analysis-only by prompt. They advise; the
+  human approves.
+- **Session-start guidance** — `hooks.json` (SessionStart) → `scripts/session_context.sh` emits a compact
+  safety brief so the model reasons in read/write/destructive terms and pauses consequential actions for
+  approval from the first turn.
+- **Reference policy engine** — `core/` + `config/` + `eval/` (stdlib, unit-tested): action classification, an
+  autonomy dial, and scenario/lint tests. Kept as a portable, tested reference; **not wired as live
+  enforcement** on Codex (see Safety posture).
 
-## Host layer (Codex-native)
-The plugin is the product; Codex is the runtime. The host layer is thin and self-locating:
-- `.codex-plugin/plugin.json` — the manifest (`"skills": "./skills/"` discovers all 72 skills recursively;
-  `interface{}` drives the composer).
-- `hooks.json` at the plugin root — Codex auto-loads it: `SessionStart` → `./scripts/session_context.sh`,
-  `PreToolUse` matcher `mcp__.*` → `./scripts/pretooluse.sh`.
-- `.agents/plugins/marketplace.json` — the marketplace manifest (the path Codex requires).
-- `scripts/pretooluse.sh` fails **closed** (emits `deny`) if no Python interpreter is on PATH, then execs
-  `scripts/pretooluse.py`, which normalizes Codex's PreToolUse event and calls the shared `core.hook`.
+## Safety posture (read this)
+The safety value here is **operator judgment**, injected at session start — not a technical control that
+blocks a tool call. On OpenAI Codex:
+- `PreToolUse` hooks fire for the **shell tool only**; **MCP connector tool calls do not trigger a hook**, and
+  only a `deny` decision has any effect. So a plugin-level deterministic gate over connector writes is **not
+  possible** on Codex today.
+- The actual gate on a connector call is **Codex's own MCP approval flow** — configure `approval_policy` and
+  per-connector `approval_mode` to match the posture a workflow recommends (observe / suggest / gated /
+  bounded-auto / auto).
+- The plugin therefore ships the judgment (classification + when-to-stop) and defers enforcement to Codex.
 
-## Data flow (a consequential action)
+## Data flow
 ```
-Codex proposes an mcp__<app>__<op> tool call
-  -> PreToolUse hook (scripts/pretooluse.sh -> scripts/pretooluse.py)
-  -> registry.classify: read | write | destructive | outbound | unknown | non-connector
-  -> autonomy.resolve: the customer's dial level for this workflow + app
-  -> gate.decide -> allow | ask | deny   (reads pass; committing/destructive/outbound gate;
-                                          unknown fails closed; bounded-auto enforces value/qty/count/currency limits)
-  -> audit the governed decision; on auto-allow, add to the session blast-radius total
+SessionStart -> scripts/session_context.sh injects the safety brief (advisory context)
+Model reasons with the skills; before a consequential connector action it classifies it and
+  presents What / preview / rollback / provenance for approval
+Codex's own MCP approval flow prompts the human on the actual tool call
 ```
-SessionStart injects a compact safety context so the model reasons in read/write/destructive terms even
-before any tool call.
-
-## Safety model
-One model: **autonomy dial (L0 observe → L5 yolo, customer-set) × action class (read / write-reversible /
-write-committing / destructive / outbound, taught by every expertise skill's matrix)**, enforced
-deterministically in `core/gate.py`. The gate never consults the model's opinion, so a prompt-injected
-"auto-approve" cannot move it. Precedence and defaults ship gated-only (a fresh install never
-auto-approves); unknown consequential operations fail closed.
 
 ## Integrations
-None owned by the plugin. It ships no MCP server, connector, adapter, or orchestrator. The customer maps
-their real connector tool names in `.scm/connectors.json` (merged over `core/registries/<app>.json`, which
-carry overridable defaults that fail closed). Live enforcement runs in the customer's environment on their
-own connectors; the plugin provides the judgment and the deterministic mechanism.
+None owned by the plugin. It ships no MCP server, connector, adapter, or orchestrator. The customer brings
+their real connectors and configures Codex's approval policy on them. The plugin provides the judgment.

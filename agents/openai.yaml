@@ -1,4 +1,4 @@
 interface:
   display_name: "MetaFloor Supply Chain"
   short_description: "Independent review agents for consequential supply-chain actions"
-  default_prompt: "Before this consequential action, delegate to a MetaFloor review agent (decision-reviewer, scope-auditor, genealogy-tracer, or cross-system-reconciler) to check facts, scope, and reconciliation. They advise; the deterministic gate still enforces."
+  default_prompt: "Before this consequential action, delegate to a MetaFloor review agent (decision-reviewer, scope-auditor, genealogy-tracer, or cross-system-reconciler) to check facts, scope, and reconciliation. They advise; the human approves the action through Codex's own approval prompt."

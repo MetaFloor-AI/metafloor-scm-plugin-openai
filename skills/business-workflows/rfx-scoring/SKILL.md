@@ -26,7 +26,7 @@ contract/PO) holds for human approval each time. Any outbound (the award/regret 
 bids, supplier financials, and quality history are sensitive, and the letters go OUT to third parties) gates
 by the outbound floor at every level below yolo. Suggested approver: category manager (e.g. R. Haas) -
 advisory only; v1 does not enforce approver identity, so approval is a real human click through the prompt,
-not a name check. The customer's `.scm/autonomy.yaml` dial is what the harness actually enforces; this is only
+not a name check. The customer's `.scm/autonomy.yaml` dial is the human-approval posture recommended here (advisory - on OpenAI Codex the tool call is gated by Codex's own MCP approval, not by this plugin); this is only
 the recommended default.
 
 ## Systems
@@ -41,7 +41,7 @@ the recommended default.
 | write | Savings log | the projected savings vs baseline + the scoring rationale | `sap-mm` (spend baseline) |
 | write (commit) | Notification - sourcing team + bidders | award/regret comms - the IRREVERSIBLE commit boundary, hard-gated (see Action classes) | - |
 
-### Action classes (what the harness gates)
+### Action classes (classified for approval)
 - **Read** - bids, spend/price history, contract terms, quality history, risk feeds. Always pass. Re-read the
   drifting ones (supplier financial health, tier-N risk, live capacity, FX) at execute, not the RFx-close snapshot.
 - **Write, reversible (internal)** - stage the award recommendation / award scenario in the sourcing tool as a

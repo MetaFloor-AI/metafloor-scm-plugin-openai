@@ -20,7 +20,7 @@ committing write that binds freight spend and carrier capacity - it holds at the
 later forfeits capacity and can trigger cancellation / detention / TONU charges.
 
 ## Autonomy
-Recommended dial for the write: **gated (L2)**. Detection and pricing run unattended across the whole network - that is what lets it scale to thousands of calls a week that the desk cannot reach by hand. Every committing write (placing the expedite tender / mode change in the TMS, which binds freight spend and carrier capacity) holds for human approval each time. Any outbound (the customer / CX notification, plus the internal carrier tender) gates by the outbound floor at every level below yolo - egress is low and no sensitive data leaves, though a premature or wrong-path notification to a top account carries commercial risk. Suggested approver: transport planner (e.g. M. Haddad) - advisory only; v1 does not enforce approver identity, so approval is a real human click through the prompt, not a name check. The customer's `.scm/autonomy.yaml` dial is what the harness actually enforces; this is only the recommended default.
+Recommended dial for the write: **gated (L2)**. Detection and pricing run unattended across the whole network - that is what lets it scale to thousands of calls a week that the desk cannot reach by hand. Every committing write (placing the expedite tender / mode change in the TMS, which binds freight spend and carrier capacity) holds for human approval each time. Any outbound (the customer / CX notification, plus the internal carrier tender) gates by the outbound floor at every level below yolo - egress is low and no sensitive data leaves, though a premature or wrong-path notification to a top account carries commercial risk. Suggested approver: transport planner (e.g. M. Haddad) - advisory only; v1 does not enforce approver identity, so approval is a real human click through the prompt, not a name check. The customer's `.scm/autonomy.yaml` dial is the human-approval posture recommended here (advisory - on OpenAI Codex the tool call is gated by Codex's own MCP approval, not by this plugin); this is only the recommended default.
 
 If the deadline will pass before the planner or a delegate can approve, the safe default is absorb - never auto-fire a committing tender without approval. Escalate to the approver's delegate, log the forced absorb, and let the memory loop flag the lane for a wider buffer so the next slip is caught earlier.
 
@@ -36,7 +36,7 @@ If the deadline will pass before the planner or a delegate can approve, the safe
 | write | Notification - customer + CX | - | - |
 | write | Savings / service log | the priced call + outcome (memory self-tunes the buffer) | - |
 
-### Action classes (what the harness gates)
+### Action classes (classified for approval)
 - **Read** - live ETA, committed window, contract terms, account tier, rate + capacity. Always pass; re-read the drifting ones at execute.
 - **Write, committing** - place the expedite tender / mode change. Binds freight spend AND carrier capacity; holds at the gate. Tender mechanics deferred to `oracle-otm` / `sap-tm`.
 - **Write, low-risk (timing-sensitive)** - the customer / CX notification and the savings-log entry. No money or capacity bound, but a premature or wrong-path notification to a top account carries commercial risk - it fires ONLY after the gate decision is finalized, with content matched to the chosen path (never off a draft / adjust in flight).

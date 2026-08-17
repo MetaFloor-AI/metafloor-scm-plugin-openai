@@ -24,7 +24,7 @@ The revised PO is **staged for release, not released** - the commit boundary is 
 supplier notification is gated. Nothing binds money or reaches the supplier before the buyer approves.
 
 ## Autonomy
-Recommended dial for the write: **gated (L2)**. Detection and pegging run unattended across every open PO - that is what lets it catch the slip the day it lands instead of at shortage time. Every committing write (the revised PO staged in SAP, the build-sequence change in the plan) holds for human approval each time. Any outbound (the supplier + planning notification, and any supplier pull-in outreach) gates by the outbound floor at every level below yolo - the outbound touches the supplier, and a premature "we need to pull this in" or a silent dual-source-away can strain the relationship or trigger a re-quote. Suggested approver: buyer (e.g. J. Rivera) - advisory only; v1 does not enforce approver identity, so approval is a real human click through the prompt, not a name check. The customer's `.scm/autonomy.yaml` dial is what the harness actually enforces; this is only the recommended default.
+Recommended dial for the write: **gated (L2)**. Detection and pegging run unattended across every open PO - that is what lets it catch the slip the day it lands instead of at shortage time. Every committing write (the revised PO staged in SAP, the build-sequence change in the plan) holds for human approval each time. Any outbound (the supplier + planning notification, and any supplier pull-in outreach) gates by the outbound floor at every level below yolo - the outbound touches the supplier, and a premature "we need to pull this in" or a silent dual-source-away can strain the relationship or trigger a re-quote. Suggested approver: buyer (e.g. J. Rivera) - advisory only; v1 does not enforce approver identity, so approval is a real human click through the prompt, not a name check. The customer's `.scm/autonomy.yaml` dial is the human-approval posture recommended here (advisory - on OpenAI Codex the tool call is gated by Codex's own MCP approval, not by this plugin); this is only the recommended default.
 
 ## Systems
 | Role | System | Authoritative for | Expertise skill |
@@ -38,7 +38,7 @@ Recommended dial for the write: **gated (L2)**. Detection and pegging run unatte
 | write | Plan - build sequence | the re-time | `kinaxis` |
 | write | Notification - supplier + planning (once) | - | - |
 
-### Action classes (what the harness gates)
+### Action classes (classified for approval)
 - **Read** - the 855, the PO + posted confirmation, on-hand + firmed inbound, the forward peg, time-phased
   demand/commit, WIP state. Always pass; re-read the drifting ones (stock, WIP, live commit, latest 855) at execute.
 - **Write, committing** - releasing the revised PO. Crossing a release threshold on the change re-triggers the

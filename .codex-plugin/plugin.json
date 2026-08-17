@@ -1,24 +1,24 @@
 {
   "name": "supply-chain",
   "version": "0.1.0",
-  "description": "Deep supply-chain operator expertise across 55 enterprise systems and 16 end-to-end workflows, plus a deterministic policy gate with an autonomy dial. Owns expertise + safety policy, never the tool/integration layer.",
+  "description": "Deep supply-chain operator expertise for OpenAI Codex: 55 enterprise-system skills and 16 end-to-end business workflows, four independent-review agents, and session-start safety guidance that keeps the model classifying and pausing consequential connector actions for human approval. Expertise + judgment; it owns no tools or connectors.",
   "author": { "name": "MetaFloor", "url": "https://metafloor.ai" },
   "homepage": "https://metafloor.ai",
-  "repository": "https://github.com/MetaFloor-AI/metafloor-scm-plugin-codex",
+  "repository": "https://github.com/MetaFloor-AI/metafloor-scm-plugin-openai",
   "license": "MIT",
-  "keywords": ["supply-chain", "erp", "sap", "oracle", "kinaxis", "procurement", "warehouse", "quality", "recall", "safety", "autonomy"],
+  "keywords": ["supply-chain", "erp", "sap", "oracle", "kinaxis", "procurement", "warehouse", "quality", "recall", "operator-expertise"],
   "skills": "./skills/",
   "interface": {
     "displayName": "MetaFloor Supply Chain",
-    "shortDescription": "Supply-chain operator expertise + a fail-closed safety gate",
-    "longDescription": "55 enterprise-system skills (SAP, Oracle, Kinaxis, Manhattan, Coupa, Veeva, and more) across ERP, planning, warehouse, transportation, procurement, quality, MES, maintenance, customs, risk, PLM, and CRM; 16 end-to-end business workflows; and a deterministic PreToolUse policy gate with an autonomy dial that governs committing and outbound connector actions. The plugin owns expertise + safety policy, never the tool/integration layer — you bring your own MCP connectors.",
+    "shortDescription": "Supply-chain operator expertise + consequential-action judgment",
+    "longDescription": "55 enterprise-system skills (SAP, Oracle, Kinaxis, Manhattan, Coupa, Veeva, and more) across ERP, planning, warehouse, transportation, procurement, quality, MES, maintenance, customs, risk, PLM, and CRM; 16 end-to-end business workflows; four independent-review agents; and session-start safety guidance that has the model classify each connector action (read / write / destructive / outbound) and pause consequential ones for human approval. The plugin owns expertise + judgment, not tools or connectors — you bring your own MCP connectors, and Codex's own approval flow gates the actual tool calls.",
     "developerName": "MetaFloor",
     "category": "Productivity",
     "capabilities": ["Read", "Interactive"],
     "websiteURL": "https://metafloor.ai",
     "defaultPrompt": [
       "How does SAP handle a partial goods receipt on a PO?",
-      "Run a DC stock-split for a scarce SKU and stage the WMS allocation through the gate.",
+      "Walk me through a DC stock-split for a scarce SKU and stage the WMS allocation for approval.",
       "Reconcile on-hand vs WMS before we act on the number."
     ]
   }
