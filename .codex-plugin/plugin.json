@@ -16,10 +16,13 @@
     "category": "Productivity",
     "capabilities": ["Read", "Interactive"],
     "websiteURL": "https://metafloor.ai",
+    "composerIcon": "./assets/brand/metafloor-mark.png",
+    "logo": "./assets/brand/metafloor-mark.png",
     "defaultPrompt": [
       "How does SAP handle a partial goods receipt on a PO?",
-      "Walk me through a DC stock-split for a scarce SKU and stage the WMS allocation for approval.",
-      "Reconcile on-hand vs WMS before we act on the number."
+      "Run an invoice 3-way match exception in Coupa and tell me how to resolve it.",
+      "Scope a recall: which finished lots consumed input lot L-4471, and where did they ship?",
+      "Reconcile on-hand between SAP and Manhattan WMS before I commit a promise."
     ]
   }
 }
