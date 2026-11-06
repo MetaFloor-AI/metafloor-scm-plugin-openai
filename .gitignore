@@ -28,3 +28,5 @@ node_modules/
 # Session audit trails + local session state (runtime, not source)
 audit/
 .scm/
+# agent records: local, and a copy in the private master repo (builder-rules registry.md)
+.dotagents/
